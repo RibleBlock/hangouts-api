@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes';
 
-const origin = process.env.ALLOWED_URL;
+const origin = 'https://hangoutspizzaria.vercel.app/';
 const port = process.env.PORT || 3333;
 
 const app = express();

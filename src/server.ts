@@ -9,7 +9,7 @@ const origin = ['https://hangoutspizzaria.vercel.app',
 
 const app = express();
 
-app.use(cors({ origin, optionsSuccessStatus: 200 }));
+app.use(cors({ origin, optionsSuccessStatus: 200, allowedHeaders: origin }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

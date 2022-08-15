@@ -3,15 +3,13 @@ import cors from 'cors';
 import routes from './routes';
 
 const port = process.env.PORT || 3333;
-const origin = ['https://hangoutspizzaria.vercel.app',
-  'https://hangoutspizza.netlify.app',
+const origin = ['https://hangoutspizza.netlify.app',
+  'https://hangoutspizzaria.vercel.app',
   'http://localhost:3000'];
 
 const app = express();
 
-app.use(cors({
-  origin, optionsSuccessStatus: 200, allowedHeaders: origin, preflightContinue: true,
-}));
+app.use(cors({ origin }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

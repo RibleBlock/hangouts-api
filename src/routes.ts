@@ -10,12 +10,12 @@ route.patch('/updateuserdata', usersControllers.selectUser);
 route.post('/login', usersControllers.store);
 route.post('/createUser', usersControllers.create);
 
-route.post('/makewish', wishControllers.create);
-route.post('/getcart', wishControllers.getCart);
+route.get('/makewish', wishControllers.create);
+route.get('/getcart', wishControllers.getCart);
 
-route.post('/flavors', flavorController.readFlavors);
-route.post('/flavorsfilter', flavorController.flavorFilter);
-route.post('/sizes', flavorController.getSizes);
-route.post('/borders', flavorController.getBorders);
+route.get('/flavors', flavorController.readFlavors);
+route.get('/flavorsfilter', flavorController.flavorFilter);
+route.get('/sizes', flavorController.getSizes);
+route.get('/borders', flavorController.getBorders);
 
 export default route;

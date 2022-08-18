@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import flavorController from './controllers/flavor.controller';
 import usersControllers from './controllers/users.controller';
 import wishControllers from './controllers/wish.controller';

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { throws } from 'assert';
 import UserModels from '../models/users.model';
 import { checkErrorInDB } from '../utils/errorDB.utils';
 import { passwordIsValid } from '../utils/checkPassword.util';
@@ -159,6 +160,26 @@ class User {
     } catch (error: any) {
       return res.status(400).json({
         error,
+      });
+    }
+  }
+
+  async allUsers(req: Request, res: Response) {
+    let errors: string = '';
+    try {
+      const { data, error } = await UserModels.getAllUsers();
+
+      if (error) {
+        errors = 'algo nao está certo!';
+        throw new Error();
+      }
+
+      return res.status(200).json(
+        data,
+      );
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
       });
     }
   }

@@ -49,6 +49,14 @@ class Users {
     return { data, error };
   }
 
+  async getAllUsers() {
+    const { data, error }: { data: UserDB[] | null, error: any } = await supabase
+      .from('users')
+      .select('*');
+
+    return { data, error };
+  }
+
   async updateOneUser({ id, field, value }: UpdateFields) {
     const { data, error }: { data: UserDB[] | null, error: any } = await supabase
       .from('users')

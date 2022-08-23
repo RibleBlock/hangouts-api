@@ -7,6 +7,7 @@ const route = express.Router();
 
 route.patch('/updateuserdata', usersControllers.selectUser);
 
+route.get('/allusers', usersControllers.allUsers);
 route.post('/login', usersControllers.store);
 route.post('/createUser', usersControllers.create);
 

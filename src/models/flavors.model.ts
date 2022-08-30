@@ -17,6 +17,12 @@ class Flavors {
         `);
       return { data, error };
     }
+    if (table === 'flavor') {
+      const { data, error } = await supabase
+        .from(table)
+        .select('*');
+      return { data, error };
+    }
     if (table) {
       const { data, error } = await supabase
         .from(table)
@@ -45,6 +51,7 @@ class Flavors {
         .from(table)
         .select(`
           *,
+          report (*),
           image (*)
         `)
         .ilike('name', `%${filter}%`); // <-- isso é loucura

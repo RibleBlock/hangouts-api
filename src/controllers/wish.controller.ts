@@ -38,7 +38,7 @@ class Wish {
   }
 
   async getCart(req: Request, res: Response) {
-    const { id_cart } = req.body;
+    const { id_cart } = req.params;
 
     let errors: any;
     try {
@@ -49,7 +49,7 @@ class Wish {
 
       const { data, error }: {
          data: cartUser[] | null, error: any,
-    } = await wishModel.getCart({ id_cart });
+    } = await wishModel.getCart({ id_cart: Number(id_cart) });
 
       if (!data) {
         errors = error.message;
@@ -61,7 +61,6 @@ class Wish {
         ...data[0].calzone,
         ...data[0].drink_cart,
       ];
-      console.log(formatedData);
 
       return res.status(200).json({
         data,

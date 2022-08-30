@@ -12,11 +12,11 @@ route.post('/login', usersControllers.store);
 route.post('/createUser', usersControllers.create);
 
 route.post('/makewish', wishControllers.create);
-route.post('/getcart', wishControllers.getCart);
+route.get('/getcart/:id_cart', wishControllers.getCart); /// PARAMS
 
-route.post('/flavors', flavorController.readFlavors);
-route.post('/flavorsfilter', flavorController.flavorFilter);
-route.post('/sizes', flavorController.getSizes);
-route.post('/borders', flavorController.getBorders);
+route.get('/flavors', flavorController.readFlavors); /// QUERY
+route.get('/flavorsfilter', flavorController.flavorFilter); /// QUERy
+route.get('/sizes', flavorController.getSizes); /// QUEry
+route.get('/borders', flavorController.getBorders); /// QUery?
 
 export default route;

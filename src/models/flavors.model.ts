@@ -37,8 +37,7 @@ class Flavors {
         flavor!id_flavor_category (
           *,
           image (*),
-          flavor_type:id_flavor_type ( name, created_at ),
-          flavor_ingredient!id_flavor(ingredient (*))
+          flavor_type:id_flavor_type ( name, created_at )
         )
       `)
       .order('price', { ascending: true });
@@ -65,8 +64,8 @@ class Flavors {
         *,
         flavor!inner(
           *,
-          image!id_image (*),
-          flavor_ingredient!id_flavor(ingredient (*))
+          report (*),
+          image!id_image (*)
         )
       `)
       .ilike('flavor.name', `%${filter}%`); // <-- isso é loucura

@@ -1,11 +1,12 @@
 /* eslint-disable no-prototype-builtins */
 import { Request, Response } from 'express';
-import flavorsModel, { SelectTable } from '../models/flavors.model';
+import flavorsModel from '../models/flavors.model';
 
 class Flavors {
   async readFlavors(req: Request, res: Response) {
     try {
       const { table } = req.query;
+      console.log(req.query);
 
       if (Object.keys(req.query).length !== 1 || !Object.keys(req.query).includes('table')) {
         return res.status(400).json({

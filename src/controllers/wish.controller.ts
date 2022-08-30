@@ -39,6 +39,7 @@ class Wish {
 
   async getCart(req: Request, res: Response) {
     const { id_cart } = req.params;
+    console.log(req.params);
 
     let errors: any;
     try {

@@ -165,9 +165,11 @@ class User {
   }
 
   async allUsers(req: Request, res: Response) {
+    const { filter } = req.query;
+
     let errors: string = '';
     try {
-      const { data, error } = await UserModels.getAllUsers();
+      const { data, error } = await UserModels.getAllUsers({ filter: `${filter}` });
 
       if (error) {
         errors = 'algo nao está certo!';

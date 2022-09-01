@@ -49,10 +49,11 @@ class Users {
     return { data, error };
   }
 
-  async getAllUsers() {
+  async getAllUsers({ filter }: {filter: string}) {
     const { data, error }: { data: UserDB[] | null, error: any } = await supabase
       .from('users')
-      .select('*');
+      .select('*')
+      .ilike('name', `%${filter}%`);
 
     return { data, error };
   }

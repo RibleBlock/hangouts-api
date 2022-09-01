@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable camelcase */
 /* eslint-disable no-prototype-builtins */
 import { Request, Response } from 'express';
 import flavorsModel from '../models/flavors.model';
@@ -129,12 +131,28 @@ class Flavors {
 
   async relatorioMensal(req: Request, res: Response) {
     try {
-      // const { data, error } = await flavorsModel.createRelatorio({
-      //   date: '',
-      //   times_ordered: 0,
-      //   id_flavor:
-      // });
-      res.send('<h1>funfou</h1>');
+      const { data, error } = await flavorsModel.store({ table: 'flavor' });
+
+      res.json({ data });
+
+      const date = new Date();
+      const dateString = `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}`;
+      // console.log(dateString);
+
+      const dataInsert: { id_flavor: any; times_ordered: number; date: string; }[] = [];
+      data?.map(({ id_flavor }) => {
+        dataInsert.push({ id_flavor, times_ordered: 0, date: dateString });
+      });
+      // console.log(dataInsert);
+
+      const { data: dataReport, error: errorReport } = await flavorsModel
+        .createRelatorio(dataInsert);
+
+      if (!errorReport && !error) {
+        res.status(200).json({
+          data: dataReport,
+        });
+      }
     } catch (error: any) {
       console.log(error);
     }

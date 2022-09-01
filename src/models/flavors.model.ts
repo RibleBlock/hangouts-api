@@ -6,6 +6,11 @@ export interface SelectTable {
   table: string,
   filter: string,
 }
+export interface DataInsert {
+  date: string,
+  times_ordered: number,
+  id_flavor: number,
+}
 
 class Flavors {
   async store({ table }: {table: string}) {
@@ -89,13 +94,10 @@ class Flavors {
     return { data, error };
   }
 
-  async createRelatorio({ date, times_ordered, id_flavor }: {
-     date: string, times_ordered: number, id_flavor: number }) {
+  async createRelatorio(dataInsert: DataInsert[]) {
     const { data, error } = await supabase
       .from('report')
-      .insert([
-        { date, times_ordered, id_flavor },
-      ]);
+      .insert(dataInsert);
     return { data, error };
   }
 }

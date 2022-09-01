@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import supabase from '../config/supabase';
 
 export interface SelectTable {
@@ -85,6 +86,16 @@ class Flavors {
       .from(table)
       .select(columns)
       .order('price', { ascending: true });
+    return { data, error };
+  }
+
+  async createRelatorio({ date, times_ordered, id_flavor }: {
+     date: string, times_ordered: number, id_flavor: number }) {
+    const { data, error } = await supabase
+      .from('report')
+      .insert([
+        { date, times_ordered, id_flavor },
+      ]);
     return { data, error };
   }
 }

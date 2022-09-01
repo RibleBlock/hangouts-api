@@ -126,5 +126,18 @@ class Flavors {
       });
     }
   }
+
+  async relatorioMensal(req: Request, res: Response) {
+    try {
+      // const { data, error } = await flavorsModel.createRelatorio({
+      //   date: '',
+      //   times_ordered: 0,
+      //   id_flavor:
+      // });
+      res.send('<h1>funfou</h1>');
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
 }
 export default new Flavors();

@@ -14,6 +14,7 @@ route.post('/createUser', usersControllers.create);
 route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_cart', wishControllers.getCart); /// PARAMS
 
+route.get('/createnewmonth', flavorController.relatorioMensal);
 route.get('/flavors', flavorController.readFlavors); /// QUERY
 route.get('/flavorsfilter', flavorController.flavorFilter); /// QUERy
 route.get('/sizes', flavorController.getSizes); /// QUEry

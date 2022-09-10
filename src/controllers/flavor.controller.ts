@@ -8,7 +8,6 @@ class Flavors {
   async readFlavors(req: Request, res: Response) {
     try {
       const { table } = req.query;
-      console.log(req.query);
 
       if (Object.keys(req.query).length !== 1 || !Object.keys(req.query).includes('table')) {
         return res.status(400).json({
@@ -100,7 +99,6 @@ class Flavors {
 
   async flavorFilter(req: Request, res: Response) {
     const { table, filter } = req.query;
-    console.log({ table, filter });
 
     try {
       if (Object.keys(req.query).includes('filter')) {
@@ -133,25 +131,25 @@ class Flavors {
     try {
       const { data, error } = await flavorsModel.store({ table: 'flavor' });
 
-      res.json({ data });
+      if (!error) {
+        const date = new Date();
+        const dateString = `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}`;
+        // console.log(dateString);
 
-      const date = new Date();
-      const dateString = `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}`;
-      // console.log(dateString);
-
-      const dataInsert: { id_flavor: any; times_ordered: number; date: string; }[] = [];
-      data?.map(({ id_flavor }) => {
-        dataInsert.push({ id_flavor, times_ordered: 0, date: dateString });
-      });
-      // console.log(dataInsert);
-
-      const { data: dataReport, error: errorReport } = await flavorsModel
-        .createRelatorio(dataInsert);
-
-      if (!errorReport && !error) {
-        res.status(200).json({
-          data: dataReport,
+        const dataInsert: { id_flavor: any; times_ordered: number; date: string; }[] = [];
+        data?.map(({ id_flavor }) => {
+          dataInsert.push({ id_flavor, times_ordered: 0, date: dateString });
         });
+        // console.log(dataInsert);
+
+        const { data: dataReport, error: errorReport } = await flavorsModel
+          .createRelatorio(dataInsert);
+
+        if (!errorReport && !error) {
+          res.status(200).json({
+            data: dataReport,
+          });
+        }
       }
     } catch (error: any) {
       console.log(error);

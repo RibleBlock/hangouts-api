@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -106,11 +107,11 @@ class User {
 
   async selectUser(req: Request, res: Response) {
     const {
-      id, field, value, password,
+      id, field, value, password, isAdmin,
     } = req.body;
 
     try {
-      if ((!Number(id) || !String(field)) || (field !== 'name' && field !== 'password' && field !== 'phone')) {
+      if ((!Number(id) || !String(field)) || (field !== 'name' && field !== 'password' && field !== 'phone' && field !== 'is_active')) {
         return res.status(400).json({
           error: 'Credenciais inválidas',
         });
@@ -124,14 +125,14 @@ class User {
         });
       }
 
-      if (!(await passwordIsValid(password, user[0].password))) {
+      if (!isAdmin && !(await passwordIsValid(password, user[0].password))) {
         return res.status(400).json({
           error: 'Senha invalida.',
         });
       }
 
       let passwordHash: string = '';
-      if (field === 'password') {
+      if (!isAdmin && field === 'password') {
         const salt = await bcryptjs.genSalt();
         passwordHash = bcryptjs.hashSync(value, salt);
       }
@@ -154,7 +155,6 @@ class User {
       }, 'código_do_serviço_secreto');
 
       return res.json({ // sucesso
-        // data, //
         token,
       });
     } catch (error: any) {

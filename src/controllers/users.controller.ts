@@ -111,7 +111,7 @@ class User {
     } = req.body;
 
     try {
-      if ((!Number(id) || !String(field)) || (field !== 'name' && field !== 'password' && field !== 'phone' && field !== 'is_active')) {
+      if ((!Number(id) || !String(field)) || (field !== 'name' && field !== 'password' && field !== 'phone' && field !== 'is_active' && field !== 'admin')) {
         return res.status(400).json({
           error: 'Credenciais inválidas',
         });

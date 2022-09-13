@@ -51,7 +51,7 @@ class Flavors {
   }
 
   async filterFlavor({ table, filter }: {table?: string, filter: string}) {
-    if (table) {
+    if (table === 'flavor') {
       const { data, error } = await supabase
         .from(table)
         .select(`

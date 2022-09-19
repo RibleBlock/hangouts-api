@@ -6,6 +6,7 @@ interface User {
   password: string,
   phone?: string,
   admin?: boolean,
+  is_active?: boolean,
   cart?: [
     {
       id_cart: number,

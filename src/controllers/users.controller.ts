@@ -16,7 +16,7 @@ class User {
     try {
       if (email && password) {
         const { data: user, error } = await UserModels.read(
-          'id, name, email, password, phone, cart!inner(id_cart, status), admin',
+          'id, name, email, password, phone, cart!inner(id_cart, status), admin, is_active',
           { email },
         );
 
@@ -30,14 +30,21 @@ class User {
             error: 'Usuário não existe',
           });
         }
-        console.log(user[0]);
+        // console.log(user[0]);
+
         const {
-          id, name, password: passwordHash, phone, admin, cart,
+          id, name, password: passwordHash, phone, admin, cart, is_active,
         } = user[0];
 
         if (!(await passwordIsValid(password, passwordHash))) {
           return res.status(406).json({
             error: 'Senha inválida',
+          });
+        }
+
+        if (!is_active) {
+          return res.status(401).json({
+            error: 'Usuário Desativado',
           });
         }
 

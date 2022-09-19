@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import supabase from '../config/supabase';
 
 interface User {
@@ -55,6 +56,15 @@ class Users {
       .from('users')
       .select('*')
       .ilike('name', `%${filter}%`);
+
+    return { data, error };
+  }
+
+  async readAddress({ id_user }: {id_user: number}) {
+    const { data, error } = await supabase
+      .from('address')
+      .select('*')
+      .match({ id_user });
 
     return { data, error };
   }

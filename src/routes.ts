@@ -10,6 +10,7 @@ route.patch('/updateuserdata', usersControllers.selectUser);
 route.get('/allusers', usersControllers.allUsers);
 route.post('/login', usersControllers.store);
 route.post('/createUser', usersControllers.create);
+route.get('/getaddress', usersControllers.getAddress);
 
 route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_cart', wishControllers.getCart); /// PARAMS

@@ -2,7 +2,6 @@
 import { Request, Response } from 'express';
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { throws } from 'assert';
 import UserModels from '../models/users.model';
 import { checkErrorInDB } from '../utils/errorDB.utils';
 import { passwordIsValid } from '../utils/checkPassword.util';
@@ -54,9 +53,6 @@ class User {
 
         return res.json({
           token,
-          user: {
-            id, name, email, phone, admin, cart,
-          },
         });
       }
       return res.status(409).json({
@@ -167,6 +163,29 @@ class User {
     } catch (error: any) {
       return res.status(400).json({
         error,
+      });
+    }
+  }
+
+  async getAddress(req: Request, res: Response) {
+    const { id } = req.query;
+
+    const errors = '';
+    try {
+      const { data, error } = await UserModels.readAddress({ id_user: Number(id) });
+
+      if (error) {
+        return res.status(400).json({
+          error,
+        });
+      }
+
+      return res.status(200).json(
+        data,
+      );
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
       });
     }
   }

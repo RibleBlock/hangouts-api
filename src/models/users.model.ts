@@ -2,6 +2,7 @@
 import supabase from '../config/supabase';
 
 interface User {
+  id_user?: number,
   name: string,
   email: string,
   password: string,
@@ -23,7 +24,7 @@ interface UserDB extends User {
   created_at: string,
 }
 export interface UpdateFields {
-  id: any,
+  id_user: any,
   field: string,
   value: string,
 }
@@ -69,11 +70,11 @@ class Users {
     return { data, error };
   }
 
-  async updateOneUser({ id, field, value }: UpdateFields) {
+  async updateOneUser({ id_user, field, value }: UpdateFields) {
     const { data, error }: { data: UserDB[] | null, error: any } = await supabase
       .from('users')
       .update({ [field]: value })
-      .match({ id });
+      .match({ id_user });
 
     return { data, error };
   }

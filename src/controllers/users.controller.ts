@@ -32,7 +32,7 @@ class User {
         // console.log(user[0]);
 
         const {
-          id, name, password: passwordHash, phone, admin, cart, is_active,
+          id_user, name, password: passwordHash, phone, admin, cart, is_active,
         } = user[0];
 
         if (!(await passwordIsValid(password, passwordHash))) {
@@ -48,7 +48,7 @@ class User {
         }
 
         const token = jwt.sign({
-          id, name, email, phone, admin, cart,
+          id_user, name, email, phone, admin, cart,
         }, 'código_do_serviço_secreto');
 
         return res.json({
@@ -120,7 +120,7 @@ class User {
         });
       }
 
-      const { data: user } = await UserModels.read('*', { id });
+      const { data: user } = await UserModels.read('*', { id_user: id });
 
       if (!user || user?.length === 0) {
         return res.status(406).json({
@@ -141,20 +141,21 @@ class User {
       }
 
       const { data, error } = await UserModels.updateOneUser({
-        id, field, value: passwordHash || value,
+        id_user: id, field, value: passwordHash || value,
       });
 
       if (error) { // caso erro no supabase
+        console.log(error);
         return res.status(400).json({
           error,
         });
       }
       const {
-        id: idUser, name, email, phone, admin,
+        id_user, name, email, phone, admin, is_active,
       } = data![0];
 
       const token = jwt.sign({
-        id: idUser, name, email, phone, admin,
+        id_user, name, email, phone, admin, is_active,
       }, 'código_do_serviço_secreto');
 
       return res.json({ // sucesso

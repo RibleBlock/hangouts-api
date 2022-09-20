@@ -15,7 +15,7 @@ class User {
     try {
       if (email && password) {
         const { data: user, error } = await UserModels.read(
-          'id, name, email, password, phone, cart!inner(id_cart, status), admin, is_active',
+          'id_user, name, email, password, phone, cart!inner(id_cart, status), admin, is_active',
           { email },
         );
 

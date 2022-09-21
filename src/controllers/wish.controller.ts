@@ -72,5 +72,35 @@ class Wish {
       });
     }
   }
+
+  async deleteCartItem(req: Request, res: Response) {
+    const { id_cart, table } = req.query;
+    console.log(req.query);
+
+    let errors: any;
+    try {
+      if (!id_cart) {
+        errors = 'ID não encontrado.';
+        throw new Error();
+      }
+
+      const { data, error }: {
+         data: cartUser[] | null, error: any,
+    } = await wishModel.deleteItem({ id: Number(id_cart), table: `${table}` });
+
+      if (!data) {
+        errors = error.message;
+        throw new Error();
+      }
+
+      return res.status(410).json({
+        message: 'item deletado',
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
+      });
+    }
+  }
 }
 export default new Wish();

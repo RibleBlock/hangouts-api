@@ -14,6 +14,7 @@ route.get('/getaddress', usersControllers.getAddress);
 
 route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_cart', wishControllers.getCart); /// PARAMS
+route.delete('/cartitem', wishControllers.deleteCartItem);
 
 route.get('/createnewmonth', flavorController.relatorioMensal);
 route.get('/flavors', flavorController.readFlavors); /// QUERY

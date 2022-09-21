@@ -170,5 +170,29 @@ class Wish {
       .match({ id_cart });
     return { data, error };
   }
+
+  async deleteItem({ id, table }: {id: number, table: string}) {
+    if (table === 'pizza') {
+      const { data, error } = await supabase
+        .from('pizza')
+        .delete()
+        .match({ id_pizza: id });
+
+      return { data, error };
+    } if (table === 'calzone') {
+      const { data, error } = await supabase
+        .from('calzone')
+        .delete()
+        .match({ id_calzone: id });
+
+      return { data, error };
+    }
+    const { data, error } = await supabase
+      .from('drink_cart')
+      .delete()
+      .match({ drink_cart: id });
+
+    return { data, error };
+  }
 }
 export default new Wish();

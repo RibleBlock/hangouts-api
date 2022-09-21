@@ -190,7 +190,7 @@ class Wish {
     const { data, error } = await supabase
       .from('drink_cart')
       .delete()
-      .match({ drink_cart: id });
+      .match({ id_drink_cart: id });
 
     return { data, error };
   }

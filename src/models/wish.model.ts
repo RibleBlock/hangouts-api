@@ -173,6 +173,11 @@ class Wish {
 
   async deleteItem({ id, table }: {id: number, table: string}) {
     if (table === 'pizza') {
+      await supabase
+        .from('pizza_flavor')
+        .delete()
+        .match({ id_pizza: id });
+
       const { data, error } = await supabase
         .from('pizza')
         .delete()

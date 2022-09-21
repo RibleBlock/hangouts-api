@@ -39,7 +39,6 @@ class Wish {
 
   async getCart(req: Request, res: Response) {
     const { id_cart } = req.params;
-    console.log(req.params);
 
     let errors: any;
     try {
@@ -75,7 +74,6 @@ class Wish {
 
   async deleteCartItem(req: Request, res: Response) {
     const { id_cart, table } = req.query;
-    console.log(req.query);
 
     let errors: any;
     try {
@@ -93,7 +91,7 @@ class Wish {
         throw new Error();
       }
 
-      return res.status(410).json({
+      return res.status(200).json({
         message: 'item deletado',
       });
     } catch (error: any) {

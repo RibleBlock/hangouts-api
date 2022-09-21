@@ -21,9 +21,9 @@ class Wish {
       }
 
       if (table === 'pizza') {
-        const result = flavors.map(async (value: number) => {
+        flavors.map(async (value: number) => {
           const { data: cart, error: errorCart } = await wishModel.addFlavorToPizza({
-            table: 'pizza_flavor', idPizza: data![0].id!, idFlavor: value,
+            table: 'pizza_flavor', idPizza: data![0].id_pizza!, idFlavor: value,
           });
         });
       }
@@ -56,12 +56,6 @@ class Wish {
         throw new Error();
       }
 
-      const formatedData = [
-        ...data[0].pizza,
-        ...data[0].calzone,
-        ...data[0].drink_cart,
-      ];
-
       return res.status(200).json({
         data,
       });
@@ -84,7 +78,7 @@ class Wish {
 
       const { data, error }: {
          data: cartUser[] | null, error: any,
-    } = await wishModel.deleteItem({ id: Number(id_cart), table: `${table}` });
+    } = await wishModel.deleteItem({ id: Number(id_cart), table: `${table}`.toLowerCase() });
 
       if (!data) {
         errors = error.message;

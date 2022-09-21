@@ -2,7 +2,7 @@
 import supabase from '../config/supabase';
 
 interface Pedido {
-  id?: number;
+  id_pizza?: number;
   size: number | null,
   border: string,
   flavors?: number[],

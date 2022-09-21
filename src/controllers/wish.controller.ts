@@ -22,7 +22,7 @@ class Wish {
 
       if (table === 'pizza') {
         flavors.map(async (value: number) => {
-          const { data: cart, error: errorCart } = await wishModel.addFlavorToPizza({
+          await wishModel.addFlavorToPizza({
             table: 'pizza_flavor', idPizza: data![0].id_pizza!, idFlavor: value,
           });
         });
@@ -80,14 +80,12 @@ class Wish {
          data: cartUser[] | null, error: any,
     } = await wishModel.deleteItem({ id: Number(id_cart), table: `${table}`.toLowerCase() });
 
-      if (!data) {
+      if (error) {
         errors = error.message;
         throw new Error();
       }
 
-      return res.status(200).json({
-        message: 'item deletado',
-      });
+      return res.status(200).json('Item deletado');
     } catch (error: any) {
       return res.status(400).json({
         error: errors,

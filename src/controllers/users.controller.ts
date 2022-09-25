@@ -16,6 +16,10 @@ class User {
       if (email && password) {
         const { data: user, error } = await UserModels.read('*, cart!inner(id_cart, status)', { email });
 
+        if (error) {
+          errors = error.message;
+          throw new Error();
+        }
         if (checkErrorInDB(error)) {
           errors = 'Email já existe';
           throw new Error();

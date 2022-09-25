@@ -1,4 +1,5 @@
 import express from 'express';
+import addressController from './controllers/address.controller';
 import flavorController from './controllers/flavor.controller';
 import usersControllers from './controllers/users.controller';
 import wishControllers from './controllers/wish.controller';
@@ -10,7 +11,9 @@ route.patch('/updateuserdata', usersControllers.selectUser);
 route.get('/allusers', usersControllers.allUsers);
 route.post('/login', usersControllers.store);
 route.post('/createUser', usersControllers.create);
+
 route.get('/getaddress', usersControllers.getAddress);
+route.post('/addaddress', addressController.newAddress);
 
 route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_cart', wishControllers.getCart); /// PARAMS

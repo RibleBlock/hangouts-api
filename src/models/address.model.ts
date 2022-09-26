@@ -19,6 +19,15 @@ class Address {
       ]);
     return { data, error };
   }
+
+  async deleteAddress({ id_address }: { id_address: number }) {
+    const { data, error } = await supabase
+      .from('address')
+      .delete()
+      .match({ id_address });
+
+    return { data, error };
+  }
 }
 
 export default new Address();

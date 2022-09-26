@@ -14,6 +14,7 @@ route.post('/createUser', usersControllers.create);
 
 route.get('/getaddress', usersControllers.getAddress);
 route.post('/addaddress', addressController.newAddress);
+route.delete('/removeaddress', addressController.removeAddress);
 
 route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_cart', wishControllers.getCart); /// PARAMS

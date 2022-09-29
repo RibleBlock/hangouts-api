@@ -13,9 +13,9 @@ class Address {
         errors = `${error.code} - ${error.message}`;
         throw new Error();
       }
-      return res.status(200).json({
+      return res.status(200).json(
         data,
-      });
+      );
     } catch (error: any) {
       return res.status(400).json({
         error: errors,
@@ -31,9 +31,15 @@ class Address {
       const { data, error } = await addressModel.deleteAddress({ id_address: Number(id) });
 
       if (error) {
-        errors = `${error.code} - ${error.message}`;
+        errors = `${error.code} - ${error.message}!`;
         throw new Error();
       }
+
+      if (data?.length === 0) {
+        errors = 'Endereço não existe!';
+        throw new Error();
+      }
+
       return res.status(200).json({
         data,
       });

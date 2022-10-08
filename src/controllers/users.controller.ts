@@ -159,9 +159,15 @@ class User {
         id_user, name, email, phone, admin, is_active,
       }, 'código_do_serviço_secreto');
 
-      return res.json({ // sucesso
-        token,
-      });
+      if (isAdmin) {
+        return res.json( // sucesso
+          data![0],
+        );
+      } else {
+        return res.json({ // sucesso
+          token,
+        });
+      }
     } catch (error: any) {
       return res.status(400).json({
         error,

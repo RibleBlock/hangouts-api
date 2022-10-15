@@ -30,7 +30,6 @@ class User {
             error: 'Usuário não existe',
           });
         }
-        // console.log(user[0]);
 
         const {
           id_user, name, password: passwordHash, phone, admin, cart, is_active,
@@ -146,7 +145,6 @@ class User {
       });
 
       if (error) { // caso erro no supabase
-        console.log(error);
         return res.status(400).json({
           error,
         });
@@ -163,11 +161,10 @@ class User {
         return res.json( // sucesso
           data![0],
         );
-      } else {
-        return res.json({ // sucesso
-          token,
-        });
       }
+      return res.json({ // sucesso
+        token,
+      });
     } catch (error: any) {
       return res.status(400).json({
         error,

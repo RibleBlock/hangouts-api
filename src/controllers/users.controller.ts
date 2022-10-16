@@ -119,8 +119,11 @@ class User {
           error: 'Credenciais inválidas',
         });
       }
-
-      const { data: user } = await UserModels.read('*', { id_user: id });
+      // drink_size_drink!id_drink_size ( drink (*) )
+      const { data: user, error: e } = await UserModels.read(
+        '*, cart!id_user(*)',
+        { id_user: id },
+      );
 
       if (!user || user?.length === 0) {
         return res.status(406).json({
@@ -154,7 +157,7 @@ class User {
       } = data![0];
 
       const token = jwt.sign({
-        id_user, name, email, phone, admin, is_active,
+        id_user, name, email, phone, admin, is_active, cart: user[0].cart,
       }, 'código_do_serviço_secreto');
 
       if (isAdmin) {

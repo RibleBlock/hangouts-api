@@ -166,7 +166,7 @@ class Wish {
     return { data, error };
   }
 
-  async getCart({ id_cart, status }: { id_cart: number, status: string }) {
+  async getCart({ id_user, status }: { id_user: number, status: string }) {
     const { data, error } = await supabase
       .from('cart')
       .select(
@@ -194,7 +194,7 @@ class Wish {
         )
       `,
       )
-      .match({ id_cart, status });
+      .match({ id_user, status });
     return { data, error };
   }
 

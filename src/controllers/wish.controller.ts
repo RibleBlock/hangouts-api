@@ -34,13 +34,21 @@ class Wish {
 
   async create(req: Request, res: Response) {
     const {
-      table, size, border, flavors, comment, id_cart,
+      table, size, border, flavors, comment, id_user,
     } = req.body;
 
     const errors: string = '';
     try {
+      const { data: cart }: { data: CartUser[] | null} = await wishModel.getCart({ id_user, status: 'creating' });
+
+      if (!cart) {
+        return res.status(400).json({
+          errors: 'carrinho nao encontrado!',
+        });
+      }
+
       const { data, error } = await wishModel.addToCart({
-        table, size, border, comment, id_cart, flavors,
+        table, size, border, comment, id_cart: cart![0].id_cart, flavors,
       });
 
       if (error) {
@@ -67,19 +75,19 @@ class Wish {
   }
 
   async getCart(req: Request, res: Response) {
-    const { id_cart } = req.params;
+    const { id_user } = req.params;
     const { status } = req.query;
 
     let errors: any;
     try {
-      if (!id_cart) {
-        errors = 'ID não encontrado.';
+      if (!id_user) {
+        errors = 'ID não informado.';
         throw new Error();
       }
 
       const { data, error }: {
          data: CartUser[] | null, error: any,
-    } = await wishModel.getCart({ id_cart: Number(id_cart), status: `${status}` });
+    } = await wishModel.getCart({ id_user: Number(id_user), status: `${status}` });
 
       if (!data) {
         errors = error.message;

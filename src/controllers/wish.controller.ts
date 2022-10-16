@@ -1,8 +1,37 @@
 /* eslint-disable camelcase */
 import { Request, Response } from 'express';
-import wishModel, { cartUser } from '../models/wish.model';
+import wishModel, { CartUser } from '../models/wish.model';
 
 class Wish {
+  async sendWish(req: Request, res: Response) {
+    // table, size, border, flavors, comment, id_cart,
+    const { idCart } = req.query;
+    console.log('idCart:', idCart);
+
+    let errors = '';
+    try {
+      const { data: CartUser }: {data: CartUser[] | null} = await wishModel.updateCart({
+        field: 'status', value: 'pending', id_cart: Number(idCart),
+      });
+      console.log({ data: CartUser });
+
+      if (!CartUser) {
+        errors = 'carrinho não encontrado!';
+        throw new Error();
+      }
+
+      const { data, error } = await wishModel.createCart({ idUser: CartUser[0].id_user });
+
+      return res.json({
+        data: CartUser,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
+      });
+    }
+  }
+
   async create(req: Request, res: Response) {
     const {
       table, size, border, flavors, comment, id_cart,
@@ -39,6 +68,7 @@ class Wish {
 
   async getCart(req: Request, res: Response) {
     const { id_cart } = req.params;
+    const { status } = req.query;
 
     let errors: any;
     try {
@@ -48,8 +78,8 @@ class Wish {
       }
 
       const { data, error }: {
-         data: cartUser[] | null, error: any,
-    } = await wishModel.getCart({ id_cart: Number(id_cart) });
+         data: CartUser[] | null, error: any,
+    } = await wishModel.getCart({ id_cart: Number(id_cart), status: `${status}` });
 
       if (!data) {
         errors = error.message;
@@ -77,7 +107,7 @@ class Wish {
       }
 
       const { data, error }: {
-         data: cartUser[] | null, error: any,
+         data: CartUser[] | null, error: any,
     } = await wishModel.deleteItem({ id: Number(id_cart), table: `${table}`.toLowerCase() });
 
       if (error) {

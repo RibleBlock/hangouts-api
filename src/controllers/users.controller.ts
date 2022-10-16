@@ -119,8 +119,8 @@ class User {
           error: 'Credenciais inválidas',
         });
       }
-      // drink_size_drink!id_drink_size ( drink (*) )
-      const { data: user, error: e } = await UserModels.read(
+
+      const { data: user } = await UserModels.read(
         '*, cart!id_user(*)',
         { id_user: id },
       );

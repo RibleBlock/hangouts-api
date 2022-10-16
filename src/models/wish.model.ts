@@ -10,7 +10,7 @@ interface Pedido {
   id_cart: number;
 }
 
-export interface cartUser {
+export interface CartUser {
   id_cart: number;
   created_at: string;
   id_user: number;
@@ -92,6 +92,16 @@ class Wish {
     return { data, error };
   }
 
+  async updateCart({ id_cart, value, field }: {
+    id_cart: number, value: string, field: string | number
+  }) {
+    const { data, error } = await supabase
+      .from('cart')
+      .update({ [field]: value })
+      .match({ id_cart });
+    return { data, error };
+  }
+
   async addToCart({
     table,
     size,
@@ -156,11 +166,12 @@ class Wish {
     return { data, error };
   }
 
-  async getCart({ id_cart }: { id_cart: number }) {
+  async getCart({ id_cart, status }: { id_cart: number, status: string }) {
     const { data, error } = await supabase
       .from('cart')
       .select(
         `
+        *,
         pizza!id_cart(
           *,
           pizza_size (*),
@@ -183,7 +194,7 @@ class Wish {
         )
       `,
       )
-      .match({ id_cart });
+      .match({ id_cart, status });
     return { data, error };
   }
 

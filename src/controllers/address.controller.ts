@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { Request, Response } from 'express';
 import addressModel from '../models/address.model';
 
@@ -28,7 +29,19 @@ class Address {
 
     let errors = '';
     try {
-      const { data, error } = await addressModel.deleteAddress({ id_address: Number(id) });
+      const { data: address } = await addressModel.getAddress({ id_address: Number(id) });
+
+      if (!address) {
+        errors = 'Endereço não encontrado!';
+        throw new Error();
+      }
+
+      const { is_active } = address[0];
+
+      const { data, error } = await addressModel.deleteAddress({
+        id_address: Number(id),
+        is_active: !is_active,
+      });
 
       if (error) {
         errors = `${error.code} - ${error.message}!`;

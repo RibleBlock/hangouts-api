@@ -61,15 +61,6 @@ class Users {
     return { data, error };
   }
 
-  async readAddress({ id_user }: {id_user: number}) {
-    const { data, error } = await supabase
-      .from('address')
-      .select('*')
-      .match({ id_user });
-
-    return { data, error };
-  }
-
   async updateOneUser({ id_user, field, value }: UpdateFields) {
     const { data, error }: { data: UserDB[] | null, error: any } = await supabase
       .from('users')

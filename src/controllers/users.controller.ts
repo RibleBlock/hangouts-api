@@ -6,6 +6,7 @@ import UserModels from '../models/users.model';
 import { checkErrorInDB } from '../utils/errorDB.utils';
 import { passwordIsValid } from '../utils/checkPassword.util';
 import wishModel from '../models/wish.model';
+import AddressModel from '../models/address.model';
 
 class User {
   async store(req: Request, res: Response): Promise<any> {
@@ -178,7 +179,7 @@ class User {
 
     const errors = '';
     try {
-      const { data, error } = await UserModels.readAddress({ id_user: Number(id) });
+      const { data, error } = await AddressModel.readAddress({ id_user: Number(id) });
 
       if (error) {
         return res.status(400).json({

@@ -14,7 +14,7 @@ class User {
     let errors: string = '';
     try {
       if (email && password) {
-        const { data: user, error } = await UserModels.read('*, cart!inner(id_cart, status)', { email });
+        const { data: user, error } = await UserModels.read('*', { email });
 
         if (error) {
           errors = error.message;
@@ -32,7 +32,7 @@ class User {
         }
 
         const {
-          id_user, name, password: passwordHash, phone, admin, cart, is_active,
+          id_user, name, password: passwordHash, phone, admin, is_active,
         } = user[0];
 
         if (!(await passwordIsValid(password, passwordHash))) {
@@ -48,7 +48,7 @@ class User {
         }
 
         const token = jwt.sign({
-          id_user, name, email, phone, admin, cart,
+          id_user, name, email, phone, admin,
         }, 'código_do_serviço_secreto');
 
         return res.json({
@@ -70,8 +70,6 @@ class User {
 
     let errors: string = '';
     try {
-      // validar dados aqui //
-
       if (name && email && password) {
         const salt = await bcryptjs.genSalt();
         const passwordHash = bcryptjs.hashSync(password, salt);
@@ -83,7 +81,7 @@ class User {
           throw new Error();
         }
         const { data: cart, error: errorCart } = await wishModel.createCart({
-          idUser: data![0].id,
+          idUser: data![0].id_user!,
         });
 
         if (errorCart) {
@@ -157,7 +155,7 @@ class User {
       } = data![0];
 
       const token = jwt.sign({
-        id_user, name, email, phone, admin, is_active, cart: user[0].cart,
+        id_user, name, email, phone, admin, is_active,
       }, 'código_do_serviço_secreto');
 
       if (isAdmin) {

@@ -85,7 +85,7 @@ export interface CartUser {
 }
 
 class Wish {
-  async createCart({ idUser }: { idUser: any }) {
+  async createCart({ idUser }: { idUser: number }) {
     const { data, error } = await supabase
       .from('cart')
       .insert([{ id_user: idUser, status: 'creating' }]);

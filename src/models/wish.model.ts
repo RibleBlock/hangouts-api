@@ -92,12 +92,22 @@ class Wish {
     return { data, error };
   }
 
-  async updateCart({ id_cart, value, field }: {
-    id_cart: number, value: string, field: string | number
+  async updateCart({
+    idAddress, id_cart, value, field, troco,
+  }: {
+    id_cart: number,
+    field: string | number,
+    value: string,
+    idAddress: number,
+    troco?: number,
   }) {
     const { data, error } = await supabase
       .from('cart')
-      .update({ [field]: value })
+      .update({
+        [field]: value,
+        id_address: idAddress,
+        troco,
+      })
       .match({ id_cart });
     return { data, error };
   }
@@ -195,6 +205,38 @@ class Wish {
       `,
       )
       .match({ id_user, status });
+    return { data, error };
+  }
+
+  async getCartAdm({ status }: { status: string }) {
+    const { data, error } = await supabase
+      .from('cart')
+      .select(
+        `
+        *,
+        pizza!id_cart(
+          *,
+          pizza_size (*),
+          pizza_border (*),
+          pizza_flavor!id_pizza (
+            flavor (
+              name,
+              flavor_category!inner (name, price)
+            )
+          )
+        ),
+        calzone!id_cart (
+          *,
+          calzone_flavor (*)
+        ),
+        drink_cart!id_cart (
+          *,
+          drink (*),
+          drink_size (*)
+        )
+      `,
+      )
+      .neq('status', status);
     return { data, error };
   }
 

@@ -18,7 +18,8 @@ route.delete('/removeaddress', addressController.removeAddress);
 
 route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_user', wishControllers.getCart); /// PARAMS
-route.patch('/sendcart', wishControllers.sendWish); ///
+route.get('/getcartadm', wishControllers.getCartADM); /// PARAMS
+route.patch('/sendcart/:id_user', wishControllers.sendWish); ///
 route.delete('/cartitem', wishControllers.deleteCartItem);
 
 route.get('/createnewmonth', flavorController.relatorioMensal);

@@ -4,16 +4,24 @@ import wishModel, { CartUser } from '../models/wish.model';
 
 class Wish {
   async sendWish(req: Request, res: Response) {
-    // table, size, border, flavors, comment, id_cart,
-    const { idCart } = req.query;
-    console.log('idCart:', idCart);
+    const { id_user } = req.params;
+    const { idAddress, thing } = req.query;
 
     let errors = '';
     try {
+      const { data: user } = await wishModel.getCart({ id_user: Number(id_user), status: 'creating' });
+      if (!user) {
+        errors = 'Usuário não encontrado!';
+        throw new Error();
+      }
+
       const { data: CartUser }: {data: CartUser[] | null} = await wishModel.updateCart({
-        field: 'status', value: 'pending', id_cart: Number(idCart),
+        field: 'status',
+        value: 'pending',
+        id_cart: user[0].id_cart,
+        idAddress: Number(idAddress),
+        troco: Number(thing),
       });
-      console.log({ data: CartUser });
 
       if (!CartUser) {
         errors = 'carrinho não encontrado!';
@@ -88,6 +96,28 @@ class Wish {
       const { data, error }: {
          data: CartUser[] | null, error: any,
     } = await wishModel.getCart({ id_user: Number(id_user), status: `${status}` });
+
+      if (!data) {
+        errors = error.message;
+        throw new Error();
+      }
+
+      return res.status(200).json({
+        data,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
+      });
+    }
+  }
+
+  async getCartADM(req: Request, res: Response) {
+    let errors: any;
+    try {
+      const { data, error }: {
+         data: CartUser[] | null, error: any,
+      } = await wishModel.getCartAdm({ status: 'creating' });
 
       if (!data) {
         errors = error.message;

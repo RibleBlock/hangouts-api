@@ -93,12 +93,13 @@ class Wish {
   }
 
   async updateCart({
-    idAddress, id_cart, value, field, troco,
+    idAddress, id_cart, value, field, troco, order_time,
   }: {
     id_cart: number,
     field: string | number,
     value: string,
-    idAddress: number,
+    order_time: string,
+    idAddress: number | null,
     troco?: number,
   }) {
     const { data, error } = await supabase
@@ -106,6 +107,7 @@ class Wish {
       .update({
         [field]: value,
         id_address: idAddress,
+        order_time,
         troco,
       })
       .match({ id_cart });
@@ -233,6 +235,12 @@ class Wish {
           *,
           drink (*),
           drink_size (*)
+        ),
+        address!inner (*),
+        users!inner (
+          id_user,
+          name,
+          email
         )
       `,
       )

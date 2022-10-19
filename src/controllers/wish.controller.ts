@@ -15,11 +15,16 @@ class Wish {
         throw new Error();
       }
 
+      const date = new Date();
+      const hora = date.getHours();
+      const min = date.getMinutes();
+
       const { data: CartUser }: {data: CartUser[] | null} = await wishModel.updateCart({
         field: 'status',
         value: 'pending',
         id_cart: user[0].id_cart,
         idAddress: Number(idAddress),
+        order_time: `${hora}:${min}`,
         troco: Number(thing),
       });
 
@@ -124,9 +129,9 @@ class Wish {
         throw new Error();
       }
 
-      return res.status(200).json({
+      return res.status(200).json(
         data,
-      });
+      );
     } catch (error: any) {
       return res.status(400).json({
         error: errors,

@@ -63,6 +63,7 @@ class Wish {
       const { data, error } = await wishModel.addToCart({
         table, size, border, comment, id_cart: cart![0].id_cart, flavors,
       });
+      console.log({ data, error });
 
       if (error) {
         return res.status(400).json({

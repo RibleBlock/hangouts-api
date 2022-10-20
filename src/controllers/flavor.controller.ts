@@ -134,13 +134,11 @@ class Flavors {
       if (!error) {
         const date = new Date();
         const dateString = `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}`;
-        // console.log(dateString);
 
         const dataInsert: { id_flavor: any; times_ordered: number; date: string; }[] = [];
         data?.map(({ id_flavor }) => {
           dataInsert.push({ id_flavor, times_ordered: 0, date: dateString });
         });
-        // console.log(dataInsert);
 
         const { data: dataReport, error: errorReport } = await flavorsModel
           .createRelatorio(dataInsert);

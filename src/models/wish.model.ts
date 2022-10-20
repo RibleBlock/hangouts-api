@@ -88,7 +88,7 @@ class Wish {
   async createCart({ idUser }: { idUser: number }) {
     const { data, error } = await supabase
       .from('cart')
-      .insert([{ id_user: idUser, status: 'creating' }]);
+      .insert([{ id_user: idUser, status: 'creating', id_address: null }]);
     return { data, error };
   }
 
@@ -181,8 +181,7 @@ class Wish {
   async getCart({ id_user, status }: { id_user: number, status: string }) {
     const { data, error } = await supabase
       .from('cart')
-      .select(
-        `
+      .select(`
         *,
         pizza!id_cart(
           *,
@@ -204,8 +203,7 @@ class Wish {
           drink (*),
           drink_size (*)
         )
-      `,
-      )
+      `)
       .match({ id_user, status });
     return { data, error };
   }

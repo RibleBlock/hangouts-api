@@ -5,7 +5,7 @@ import wishModel, { CartUser } from '../models/wish.model';
 class Wish {
   async sendWish(req: Request, res: Response) {
     const { id_user } = req.params;
-    const { idAddress, thing } = req.query;
+    const { idAddress, thing, ordertime } = req.query;
 
     let errors = '';
     try {
@@ -15,16 +15,12 @@ class Wish {
         throw new Error();
       }
 
-      const date = new Date();
-      const hora = date.getHours();
-      const min = date.getMinutes();
-
       const { data: CartUser }: {data: CartUser[] | null} = await wishModel.updateCart({
         field: 'status',
         value: 'pending',
         id_cart: user[0].id_cart,
         idAddress: Number(idAddress),
-        order_time: `${hora}:${min}`,
+        order_time: `${ordertime}`,
         troco: Number(thing),
       });
 

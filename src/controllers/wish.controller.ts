@@ -5,14 +5,34 @@ import wishModel, { CartUser } from '../models/wish.model';
 class Wish {
   async sendWish(req: Request, res: Response) {
     const { id_user } = req.params;
-    const { idAddress, thing, ordertime } = req.query;
+    const {
+      idAddress, thing, ordertime, date,
+    } = req.query;
 
     let errors = '';
     try {
-      const { data: user } = await wishModel.getCart({ id_user: Number(id_user), status: 'creating' });
+      const { data: user }: {data: CartUser[] | null} = await wishModel.getCart({ id_user: Number(id_user), status: 'creating' });
       if (!user) {
         errors = 'Usuário não encontrado!';
         throw new Error();
+      }
+      // console.log(user[0].pizza[0].pizza_flavor[0].flavor);
+
+      if (user[0].pizza.length > 0) {
+        await user[0].pizza.map(async ({ pizza_flavor }) => {
+          await pizza_flavor.map(async ({ flavor: { id_flavor } }) => {
+            const { data: flavor, error: flavorErr } = await wishModel.getFlavor({
+              id_flavor, date: `${date}`,
+            });
+            if (flavor) {
+              const { data: updateFlavor, error: updateFlavorErr } = await wishModel.updateFlavor({
+                id_flavor: flavor![0].id_flavor,
+                date: `${date}`,
+                value: flavor![0].times_ordered + 1,
+              });
+            }
+          });
+        });
       }
 
       const { data: CartUser }: {data: CartUser[] | null} = await wishModel.updateCart({

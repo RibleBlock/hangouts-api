@@ -84,6 +84,17 @@ export interface CartUser {
   ];
 }
 
+interface Report {
+
+      id_report: 21,
+      created_at: '2022-10-01T03:03:55.110148+00:00',
+      date: '2022-10',
+      times_ordered: 0,
+      id_flavor: 3,
+      id_calzone_flavor: null
+
+}
+
 class Wish {
   async createCart({ idUser }: { idUser: number }) {
     const { data, error } = await supabase
@@ -189,6 +200,7 @@ class Wish {
           pizza_border (*),
           pizza_flavor!id_pizza (
             flavor (
+              id_flavor,
               name,
               flavor_category!inner (name, price)
             )
@@ -270,6 +282,23 @@ class Wish {
       .delete()
       .match({ id_drink_cart: id });
 
+    return { data, error };
+  }
+
+  // SABORES //
+  async getFlavor({ id_flavor, date }:{id_flavor: number, date: string}) {
+    const { data, error }:{data: Report[] | null, error: any} = await supabase
+      .from('report')
+      .select('*')
+      .match({ id_flavor, date });
+    return { data, error };
+  }
+
+  async updateFlavor({ id_flavor, date, value }:{id_flavor: number, date: string, value: number}) {
+    const { data, error } = await supabase
+      .from('report')
+      .update({ times_ordered: value })
+      .match({ id_flavor, date });
     return { data, error };
   }
 }

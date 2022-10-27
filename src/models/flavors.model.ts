@@ -56,8 +56,8 @@ class Flavors {
         .from(table)
         .select(`
           *,
-          flavor_type!id_flavor_type (name),
-          flavor_category!id_flavor_category (name, price),
+          flavor_type!id_flavor_type (*),
+          flavor_category!id_flavor_category (*),
           report (*),
           image (*)
         `)

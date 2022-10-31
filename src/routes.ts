@@ -20,6 +20,7 @@ route.post('/makewish', wishControllers.create);
 route.get('/getcart/:id_user', wishControllers.getCart); /// PARAMS
 route.get('/getcartadm', wishControllers.getCartADM); /// PARAMS
 route.patch('/sendcart/:id_user', wishControllers.sendWish); ///
+route.patch('/updatecartadm/:id_cart', wishControllers.updateCartAdm); ///
 route.delete('/cartitem', wishControllers.deleteCartItem);
 
 route.get('/createnewmonth', flavorController.relatorioMensal);

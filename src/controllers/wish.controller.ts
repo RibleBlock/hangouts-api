@@ -3,6 +3,39 @@ import { Request, Response } from 'express';
 import wishModel, { CartUser } from '../models/wish.model';
 
 class Wish {
+  async updateCartAdm(req: Request, res: Response) {
+    const { id_cart } = req.params;
+    const { status, reason } = req.body;
+
+    let errors = '';
+    try {
+      if (!status || !id_cart) {
+        errors = 'dados não enviados!';
+        throw new Error();
+      }
+
+      const { data: CartUser }: {data: CartUser[] | null} = await wishModel.updateCart({
+        id_cart: Number(id_cart),
+        field: 'status',
+        value: `${status}`,
+        reason,
+      });
+
+      if (!CartUser) {
+        errors = 'carrinho não encontrado!';
+        throw new Error();
+      }
+
+      return res.json({
+        data: CartUser,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
+      });
+    }
+  }
+
   async sendWish(req: Request, res: Response) {
     const { id_user } = req.params;
     const {
@@ -16,7 +49,6 @@ class Wish {
         errors = 'Usuário não encontrado!';
         throw new Error();
       }
-      // console.log(user[0].pizza[0].pizza_flavor[0].flavor);
 
       if (user[0].pizza.length > 0) {
         await user[0].pizza.map(async ({ pizza_flavor }) => {
@@ -79,7 +111,6 @@ class Wish {
       const { data, error } = await wishModel.addToCart({
         table, size, border, comment, id_cart: cart![0].id_cart, flavors,
       });
-      console.log({ data, error });
 
       if (error) {
         return res.status(400).json({
@@ -139,7 +170,7 @@ class Wish {
     try {
       const { data, error }: {
          data: CartUser[] | null, error: any,
-      } = await wishModel.getCartAdm({ status: 'creating' });
+      } = await wishModel.getCartAdm({ eStatus: ['creating', 'cancel'] });
 
       if (!data) {
         errors = error.message;

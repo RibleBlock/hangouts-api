@@ -104,13 +104,14 @@ class Wish {
   }
 
   async updateCart({
-    idAddress, id_cart, value, field, troco, order_time,
+    idAddress, id_cart, value, field, troco, order_time, reason,
   }: {
     id_cart: number,
     field: string | number,
     value: string,
-    order_time: string,
-    idAddress: number | null,
+    reason?: string,
+    order_time?: string,
+    idAddress?: number | null,
     troco?: number,
   }) {
     const { data, error } = await supabase
@@ -118,6 +119,7 @@ class Wish {
       .update({
         [field]: value,
         id_address: idAddress,
+        reason,
         order_time,
         troco,
       })
@@ -189,6 +191,14 @@ class Wish {
     return { data, error };
   }
 
+  async getOnlyCart({ id_user, status }: { id_user: number, status: string }) {
+    const { data, error } = await supabase
+      .from('cart')
+      .select('*')
+      .match({ id_user, status });
+    return { data, error };
+  }
+
   async getCart({ id_user, status }: { id_user: number, status: string }) {
     const { data, error } = await supabase
       .from('cart')
@@ -220,11 +230,10 @@ class Wish {
     return { data, error };
   }
 
-  async getCartAdm({ status }: { status: string }) {
+  async getCartAdm({ eStatus }: { eStatus: string[] }) {
     const { data, error } = await supabase
       .from('cart')
-      .select(
-        `
+      .select(`
         *,
         pizza!id_cart(
           *,
@@ -252,9 +261,10 @@ class Wish {
           name,
           email
         )
-      `,
-      )
-      .neq('status', status);
+      `)
+      .neq('status', eStatus[0])
+      .neq('status', eStatus[1])
+      .neq('status', eStatus[2]);
     return { data, error };
   }
 

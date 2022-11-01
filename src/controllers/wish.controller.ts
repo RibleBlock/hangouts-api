@@ -53,11 +53,11 @@ class Wish {
       if (user[0].pizza.length > 0) {
         await user[0].pizza.map(async ({ pizza_flavor }) => {
           await pizza_flavor.map(async ({ flavor: { id_flavor } }) => {
-            const { data: flavor, error: flavorErr } = await wishModel.getFlavor({
+            const { data: flavor } = await wishModel.getFlavor({
               id_flavor, date: `${date}`,
             });
             if (flavor) {
-              const { data: updateFlavor, error: updateFlavorErr } = await wishModel.updateFlavor({
+              await wishModel.updateFlavor({
                 id_flavor: flavor![0].id_flavor,
                 date: `${date}`,
                 value: flavor![0].times_ordered + 1,

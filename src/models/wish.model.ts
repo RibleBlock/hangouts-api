@@ -85,14 +85,11 @@ export interface CartUser {
 }
 
 interface Report {
-
-      id_report: 21,
-      created_at: '2022-10-01T03:03:55.110148+00:00',
-      date: '2022-10',
-      times_ordered: 0,
-      id_flavor: 3,
+      id_report: number,
+      date: string,
+      times_ordered: number,
+      id_flavor: number,
       id_calzone_flavor: null
-
 }
 
 class Wish {
@@ -200,6 +197,37 @@ class Wish {
   }
 
   async getCart({ id_user, status }: { id_user: number, status: string }) {
+    if (status === 'noStatus') {
+      const { data, error } = await supabase
+        .from('cart')
+        .select(`
+          *,
+          pizza!id_cart(
+            *,
+            pizza_size (*),
+            pizza_border (*),
+            pizza_flavor!id_pizza (
+              flavor (
+                id_flavor,
+                name,
+                flavor_category!inner (name, price)
+              )
+            )
+          ),
+          calzone!id_cart (
+            *,
+            calzone_flavor (*)
+          ),
+          drink_cart!id_cart (
+            *,
+            drink (*),
+            drink_size (*)
+          )
+        `)
+        .neq('status', 'creating')
+        .match({ id_user });
+      return { data, error };
+    }
     const { data, error } = await supabase
       .from('cart')
       .select(`

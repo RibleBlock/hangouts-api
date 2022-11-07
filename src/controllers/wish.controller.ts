@@ -170,7 +170,7 @@ class Wish {
     try {
       const { data, error }: {
          data: CartUser[] | null, error: any,
-      } = await wishModel.getCartAdm({ eStatus: ['creating', 'cancel'] });
+      } = await wishModel.getCartAdm({ eStatus: ['creating', 'cancel', 'concluded'] });
 
       if (!data) {
         errors = error.message;

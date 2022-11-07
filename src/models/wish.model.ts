@@ -291,7 +291,8 @@ class Wish {
         )
       `)
       .neq('status', eStatus[0])
-      .neq('status', eStatus[1]);
+      .neq('status', eStatus[1])
+      .neq('status', eStatus[2]);
     return { data, error };
   }
 

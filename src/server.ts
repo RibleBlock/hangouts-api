@@ -5,6 +5,7 @@ import routes from './routes';
 const port = process.env.PORT || 3333;
 const origin = ['https://hangoutspizza.netlify.app',
   'https://hangoutspizzaria.vercel.app',
+  'http://localhost:5173',
   'http://localhost:3000'];
 
 const app = express();

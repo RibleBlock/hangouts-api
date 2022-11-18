@@ -153,5 +153,68 @@ class Flavors {
       console.log(error);
     }
   }
+
+  async updateFlavor(req: Request, res: Response) {
+    const { id_flavor } = req.params;
+    const {
+      name, ingredients, image, id_type, id_category,
+    } = req.body;
+
+    try {
+      const { data, error } = await flavorsModel.updateFlavor({
+        table: 'flavor',
+        object: {
+          name,
+          ingredients,
+          id_flavor: Number(id_flavor),
+          id_flavor_type: id_type,
+          id_flavor_category: id_category,
+        },
+        filter: { id_flavor: Number(id_flavor) },
+      });
+
+      if (!data) {
+        return res.status(400).json({
+          error,
+        });
+      }
+      if (data[0].id_image !== null) {
+        const { data: updateData, error: updateError } = await flavorsModel.updateFlavor({
+          table: 'image',
+          object: { url_image: image },
+          filter: { id: data[0].id_image },
+        });
+
+        if (!updateData) {
+          return res.status(400).json({
+            error: updateError?.message,
+          });
+        }
+      } else {
+        const { data: imageData, error: imageError } = await flavorsModel.createImage({ image });
+
+        if (!imageData) {
+          return res.status(400).json({
+            error: imageError?.message,
+          });
+        }
+        console.log(imageData);
+        const { data, error } = await flavorsModel.updateFlavor({
+          table: 'flavor',
+          object: { id_image: imageData[0].id },
+          filter: { id_flavor: Number(id_flavor) },
+        });
+        console.log({ data, error });
+      }
+
+      return res.json({
+        data,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        error,
+      });
+    }
+  }
 }
 export default new Flavors();

@@ -12,6 +12,17 @@ export interface DataInsert {
   id_flavor: number,
 }
 
+interface Flavor {
+  id_flavor?: number,
+  url_image?: string,
+  name?: string,
+  ingredients?: string[],
+  id?: number,
+  id_image?: number,
+  id_flavor_type?: number,
+  id_flavor_category?: number,
+}
+
 class Flavors {
   async store({ table }: {table: string}) {
     if (table === 'drink_size') {
@@ -93,6 +104,24 @@ class Flavors {
       .from(table)
       .select(columns)
       .order('price', { ascending: true });
+    return { data, error };
+  }
+
+  async updateFlavor({ table, object, filter }: {
+    table: string, object: Flavor, filter: Flavor}) {
+    const { data, error } = await supabase
+      .from(table)
+      .update(object)
+      .match({ ...filter });
+
+    return { data, error };
+  }
+
+  async createImage({ image }: { image: string }) {
+    const { data, error } = await supabase
+      .from('image')
+      .insert([{ url_image: image }]);
+
     return { data, error };
   }
 

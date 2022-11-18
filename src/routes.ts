@@ -24,6 +24,7 @@ route.patch('/updatecartadm/:id_cart', wishControllers.updateCartAdm); ///
 route.delete('/cartitem', wishControllers.deleteCartItem);
 
 route.get('/createnewmonth', flavorController.relatorioMensal);
+route.patch('/updateflavor/:id_flavor', flavorController.updateFlavor);
 route.get('/flavors', flavorController.readFlavors); /// QUERY
 route.get('/flavorsfilter', flavorController.flavorFilter); /// QUERy
 route.get('/sizes', flavorController.getSizes); /// QUEry

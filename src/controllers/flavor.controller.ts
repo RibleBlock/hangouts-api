@@ -5,6 +5,60 @@ import { Request, Response } from 'express';
 import flavorsModel from '../models/flavors.model';
 
 class Flavors {
+  async createFlavor(req: Request, res: Response) {
+    const {
+      name, ingredients, image, type, category,
+    } = req.body;
+
+    try {
+      const { data: dataType, error: typeError } = await flavorsModel.getFlavorType({ type });
+      if (!dataType) {
+        return res.status(400).json({
+          error: typeError,
+        });
+      }
+      const { data: dataCategory, error: categoryError } = await flavorsModel
+        .getFlavorCategory({ category });
+      if (!dataCategory) {
+        return res.status(400).json({
+          error: categoryError,
+        });
+      }
+
+      const { data, error } = await flavorsModel.insertFlavor({
+        name,
+        ingredients,
+        id_flavor_type: dataType[0].id_flavor_type,
+        id_flavor_category: dataCategory[0].id_flavor_category,
+      });
+      if (!data) {
+        return res.status(400).json({
+          error,
+        });
+      }
+
+      const date = new Date();
+      const dateString = `${date.getFullYear()}-${(date.getMonth() + 1) < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}`;
+
+      const { data: reportData, error: reportError } = await flavorsModel.createRelatorio([{
+        id_flavor: data[0].id_flavor,
+        date: dateString,
+        times_ordered: 0,
+      }]);
+      if (!reportData) {
+        return res.status(400).json({
+          error: reportError,
+        });
+      }
+
+      return res.json({ data });
+    } catch (error: any) {
+      return res.status(400).json({
+        error,
+      });
+    }
+  }
+
   async readFlavors(req: Request, res: Response) {
     try {
       const { table } = req.query;

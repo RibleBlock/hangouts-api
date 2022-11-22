@@ -149,5 +149,12 @@ class Flavors {
       .insert(dataInsert);
     return { data, error };
   }
+
+  async insertFlavor(flavor: Flavor) {
+    const { data, error } = await supabase
+      .from('flavor')
+      .insert([flavor]);
+    return { data, error };
+  }
 }
 export default new Flavors();

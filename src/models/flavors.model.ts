@@ -107,6 +107,24 @@ class Flavors {
     return { data, error };
   }
 
+  async getFlavorCategory({ category }:{category:string}) {
+    const { data, error } = await supabase
+      .from('flavor_category')
+      .select('id_flavor_category, name')
+      .match({ name: category });
+
+    return { data, error };
+  }
+
+  async getFlavorType({ type }:{type:string}) {
+    const { data, error } = await supabase
+      .from('flavor_type')
+      .select('id_flavor_type, name')
+      .match({ name: type });
+
+    return { data, error };
+  }
+
   async updateFlavor({ table, object, filter }: {
     table: string, object: Flavor, filter: Flavor}) {
     const { data, error } = await supabase

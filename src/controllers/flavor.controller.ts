@@ -157,18 +157,32 @@ class Flavors {
   async updateFlavor(req: Request, res: Response) {
     const { id_flavor } = req.params;
     const {
-      name, ingredients, image, id_type, id_category,
+      name, ingredients, image, type, category,
     } = req.body;
 
     try {
+      const { data: dataType, error: typeError } = await flavorsModel.getFlavorType({ type });
+      if (!dataType) {
+        return res.status(400).json({
+          error: typeError,
+        });
+      }
+      const { data: dataCategory, error: categoryError } = await flavorsModel
+        .getFlavorCategory({ category });
+      if (!dataCategory) {
+        return res.status(400).json({
+          error: categoryError,
+        });
+      }
+
       const { data, error } = await flavorsModel.updateFlavor({
         table: 'flavor',
         object: {
           name,
           ingredients,
           id_flavor: Number(id_flavor),
-          id_flavor_type: id_type,
-          id_flavor_category: id_category,
+          id_flavor_type: dataType[0].id_flavor_type,
+          id_flavor_category: dataCategory[0].id_flavor_category,
         },
         filter: { id_flavor: Number(id_flavor) },
       });
@@ -198,13 +212,11 @@ class Flavors {
             error: imageError?.message,
           });
         }
-        console.log(imageData);
         const { data, error } = await flavorsModel.updateFlavor({
           table: 'flavor',
           object: { id_image: imageData[0].id },
           filter: { id_flavor: Number(id_flavor) },
         });
-        console.log({ data, error });
       }
 
       return res.json({

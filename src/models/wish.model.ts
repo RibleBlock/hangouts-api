@@ -202,6 +202,7 @@ class Wish {
         .from('cart')
         .select(`
           *,
+          address(*),
           pizza!id_cart(
             *,
             pizza_size (*),

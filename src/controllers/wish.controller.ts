@@ -165,6 +165,36 @@ class Wish {
     }
   }
 
+  async inactiveWish(req: Request, res: Response) {
+    const { id_cart } = req.params;
+    const { value } = req.body;
+
+    let errors: any;
+    try {
+      if (!id_cart) {
+        errors = 'ID não informado.';
+        throw new Error();
+      }
+
+      const { data, error }: {
+         data: CartUser[] | null, error: any,
+      } = await wishModel.updateCart({ id_cart: Number(id_cart), field: 'is_active', value });
+
+      if (!data) {
+        errors = error.message;
+        throw new Error();
+      }
+
+      return res.status(200).json({
+        data,
+      });
+    } catch (error: any) {
+      return res.status(400).json({
+        error: errors,
+      });
+    }
+  }
+
   async getCartADM(req: Request, res: Response) {
     let errors: any;
     try {

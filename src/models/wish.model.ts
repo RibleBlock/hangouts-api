@@ -226,6 +226,7 @@ class Wish {
           )
         `)
         .neq('status', 'creating')
+        .eq('is_active', true)
         .match({ id_user });
       return { data, error };
     }

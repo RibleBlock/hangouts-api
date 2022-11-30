@@ -76,6 +76,17 @@ class Flavors {
 
       return { data, error };
     }
+    if (table === 'calzone_flavor') {
+      const { data, error } = await supabase
+        .from(table)
+        .select(`
+          *,
+          image (*)
+        `)
+        .ilike('name', `%${filter}%`); // <-- isso é loucura
+
+      return { data, error };
+    }
 
     const { data, error } = await supabase
       .from('flavor_type')
